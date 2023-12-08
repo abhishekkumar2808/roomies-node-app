@@ -4,6 +4,7 @@ import * as dao from "./dao.js";
 
 function DataRoutes(app, client) {
 
+
     function generateRandomNumbers(n, min, max) {
         let randomNumbers = [];
       
@@ -14,9 +15,6 @@ function DataRoutes(app, client) {
       
         return randomNumbers;
       }
-
-
-    let currentUser = null;
 
 
 
@@ -46,8 +44,8 @@ function DataRoutes(app, client) {
 
         const { firstname, lastname } = req.body;
         const currentUsr = await dao.findUserByCredentials(client, firstname, lastname);
-        currentUser = currentUsr;
-        res.json(currentUser);
+        req.session['currentUser'] = currentUsr;
+        res.json(currentUsr);
     
     };
 
@@ -62,8 +60,8 @@ function DataRoutes(app, client) {
         if (user[0] === undefined) {
 
             const currentUsr = await dao.createUser(client, req.body);
-            currentUser = currentUsr;
-            res.status(200).json(currentUser);
+            req.session['currentUser'] = currentUsr;
+            res.json(currentUsr);
 
         }
         else{
@@ -103,7 +101,7 @@ function DataRoutes(app, client) {
         const user = await dao.deleteUserById(client,userId);
 
 
-
+            req.session['currentUser'] = null;
             res.json({"message": "done"})
         
 
@@ -117,7 +115,8 @@ function DataRoutes(app, client) {
         userId = parseInt(userId)
         const user = await dao.findUserById(client,userId);
 
-        res.json(user)
+        //req.session['currentUser'] = user;
+        res.json(user);
         
 
     
@@ -129,7 +128,7 @@ function DataRoutes(app, client) {
         let { userId } = req.params;
         userId = parseInt(userId)
         const user = await dao.updateUser(client,userId, req.body);
-
+        req.session['currentUser'] = user;
         res.json(user)
         
 
@@ -138,16 +137,16 @@ function DataRoutes(app, client) {
 
     const signout = (req, res) => {
 
-        currentUser = null;
-        res.json(200);
-        // req.session.destroy();
+        // currentUser = null;
         // res.json(200);
+        req.session.destroy();
+        res.json(200);
        }; 
 
-       const account = async (req, res) => { 
+    const account = async (req, res) => { 
 
-        res.json(currentUser);
-        // res.json(req.session['currentUser']);
+        //res.json(currentUser);
+        res.json(req.session['currentUser']);
       };
 
     app.get('/api/users', getUsers);
