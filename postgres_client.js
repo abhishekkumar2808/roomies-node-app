@@ -5,10 +5,10 @@ const { Client } = pkg;
 async function PostgreSQLgClient() {
 
 const connectionOptions = {
-    user: 'postgres',
-    host: 'localhost',
-    database: 'roomies',
-    password: '@Abhisid2811',
+    user: 'dvqpuvrl',
+    host: 'berry.db.elephantsql.com',
+    database: 'dvqpuvrl',
+    password: 'ZphSx5SSFtcZEu8EOVIoda__R_M_qUDl',
     port: '5432', 
   };
   
