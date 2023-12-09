@@ -16,11 +16,11 @@ export const getUsers = async (client) =>{
 
 }
 
-export const findUserByCredentials = async (client, firstname, lastname) => {
+export const findUserByCredentials = async (client, username, password) => {
 
     try {
-        const query = ` SELECT * FROM users WHERE firstname = $1 AND lastname = $2; `;
-        const result = await client.query(query, [firstname, lastname]);
+        const query = ` SELECT * FROM users WHERE username = $1 AND password = $2; `;
+        const result = await client.query(query, [username, password]);
 
         // Display the retrieved data
         console.log('Retrieved rows of cred:', result.rows);
