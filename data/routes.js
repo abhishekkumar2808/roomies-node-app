@@ -22,11 +22,12 @@ function DataRoutes(app, client) {
     const getUsers =  async (req, res) => {
 
         const users = await dao.getUsers(client); 
+        console.log("session value: "+ req.session['currentUser'])
 
-        if(currentUser === null){
+        if(req.session['currentUser'] === undefined){
 
             let randomIDs = generateRandomNumbers(4, 1, 10);
-            console.log("current user: "+ currentUser);
+       
             const randUsers = users.filter(usr => randomIDs.includes(usr.id) );
             res.json(randUsers);
 
@@ -44,7 +45,9 @@ function DataRoutes(app, client) {
 
         const { username, password } = req.body;
         const currentUsr = await dao.findUserByCredentials(client, username, password);
+        
         req.session['currentUser'] = currentUsr;
+        console.log("session currentusr: "+  JSON.stringify(req.session['currentUser']))
         res.json(currentUsr);
     
     };
@@ -80,7 +83,6 @@ function DataRoutes(app, client) {
         console.log("univ: "+ univ)
         const user = await dao.findUserByUniv(client,univ);
 
-        console.log("insdie univ: "+ JSON.stringify(user[0]))
 
         if (user[0] === undefined) {
 
@@ -146,6 +148,7 @@ function DataRoutes(app, client) {
     const account = async (req, res) => { 
 
         //res.json(currentUser);
+        console.log(" in acct: "+ req.session['currentUser'])
         res.json(req.session['currentUser']);
       };
 
