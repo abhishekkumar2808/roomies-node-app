@@ -2,7 +2,7 @@ import * as dao from "./dao.js";
 
 
 
-function DataRoutes(app, client) {
+function AdminRoutes(app, client) {
 
 
     function generateRandomNumbers(n, min, max) {
@@ -44,7 +44,7 @@ function DataRoutes(app, client) {
     const signin = async (req, res) => {
 
         const { username, password } = req.body;
-        const currentUsr = await dao.findUserByCredentials(client, username, password);
+        const currentUsr = await dao.findAdminByCredentials(client, username, password);
         
         req.session['currentUser'] = currentUsr;
         console.log("session currentusr: "+  JSON.stringify(req.session['currentUser']))
@@ -110,6 +110,21 @@ function DataRoutes(app, client) {
     
     };
 
+    const deleteUniv = async (req, res) => {
+
+
+        let { univ } = req.params;
+        //userId = parseInt(userId)
+        const user = await dao.deleteUserByUniv(client,univ);
+
+
+            //req.session['currentUser'] = null;
+            res.json({"message": "done"})
+        
+
+    
+    };
+
     const findUserById = async (req, res) => {
 
 
@@ -126,10 +141,25 @@ function DataRoutes(app, client) {
 
     const updateUser = async (req, res) => {
 
-
+        
         let { userId } = req.params;
         userId = parseInt(userId)
+        console.log('here: '+ userId)
         const user = await dao.updateUser(client,userId, req.body);
+        // req.session['currentUser'] = user;
+        res.json(user)
+        
+
+    
+    };
+
+    const updateAdmin = async (req, res) => {
+
+        
+        let { adminId } = req.params;
+        adminId = parseInt(adminId)
+        console.log('heree: '+ adminId)
+        const user = await dao.updateAdmin(client, adminId, req.body);
         req.session['currentUser'] = user;
         res.json(user)
         
@@ -152,24 +182,43 @@ function DataRoutes(app, client) {
         res.json(req.session['currentUser']);
       };
 
-    const getUnivs = async (req, res) => {
+    const createUser = async (req, res) => {
 
-        const univ = await dao.getUnivs(client);
-        res.json(univ);
-    }
 
-    app.get('/api/users', getUsers);
-    app.get("/api/users/:univ", findUserByUniv);
-    app.post("/api/users/univ", getUnivs)
-    app.put("/api/users/:userId", updateUser)
-    app.post("/api/users/signup", signup);
-    app.post("/api/users/signin", signin);
-    app.post("/api/users/signout", signout);
-    app.post("/api/users/account", account);
-    app.post("/api/users/:userId", findUserById);
-    app.delete("/api/users/:userId", deleteUser);
+        console.log("data while creating user: "+ JSON.stringify(req.body))
+
+        const user = await dao.findUserByUsername(client,req.body.username);
+        console.log("insdie signup: "+ JSON.stringify(user[0]))
+
+        if (user[0] === undefined) {
+
+            const currentUsr = await dao.createUser(client, req.body);
+            //req.session['currentUser'] = currentUsr;
+            res.json(currentUsr);
+
+        }
+        else{
+            res.status(404).json(
+                { message: "Username already taken" });
+        }
+
+    
+    };
+
+    app.get('/api/admin/users', getUsers);
+    app.get("/api/admin/users/:univ", findUserByUniv);
+    app.put("/api/admin/:adminId", updateAdmin)
+    app.put("/api/admin/users/:userId", updateUser)
+    app.post("/api/admin/users",createUser)
+    //app.post("/api/admin/users/signup", signup);
+    app.post("/api/admin/users/signin", signin);
+    app.post("/api/admin/users/signout", signout);
+    app.post("/api/admin/users/account", account);
+    app.post("/api/admin/users/:userId", findUserById);
+    app.delete("/api/admin/users/:userId", deleteUser);
+    app.delete("/api/admin/users/univ/:univ", deleteUniv);
     
 
 }
 
-export default DataRoutes;
+export default AdminRoutes;

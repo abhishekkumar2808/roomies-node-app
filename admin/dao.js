@@ -16,14 +16,14 @@ export const getUsers = async (client) =>{
 
 }
 
-export const findUserByCredentials = async (client, username, password) => {
+export const findAdminByCredentials = async (client, username, password) => {
 
     try {
-        const query = ` SELECT * FROM users WHERE username = $1 AND password = $2; `;
+        const query = ` SELECT * FROM admin WHERE username = $1 AND password = $2; `;
         const result = await client.query(query, [username, password]);
 
         // Display the retrieved data
-        console.log('Retrieved rows of cred:', result.rows);
+        console.log('Retrieved rows of admin:', result.rows);
 
         return result.rows;
     } 
@@ -117,6 +117,26 @@ export const deleteUserById = async(client, userId) => {
 
 }
 
+export const deleteUserByUniv = async(client, univ) => {
+
+
+    
+    try {
+                                               
+        const query = `DELETE FROM  users WHERE university = $1`;
+        const result = await client.query(query, [univ]);
+
+        // Display the retrieved data
+        console.log('Retrieved rows:', result.rows);
+
+        return result.rows;
+    } 
+    catch (error) {
+        console.error('Error retrieving data:', error);
+    } 
+
+}
+
 export const findUserById = async(client, userId) => {
 
 
@@ -169,11 +189,21 @@ export const updateUser = async(client, userId, user) => {
 
 }
 
-export const getUnivs = async (client) => {
+export const updateAdmin = async(client, userId, user) => {
 
+
+    
     try {
-        const query = 'SELECT * FROM university';
-        const result = await client.query(query);
+           console.log("h: "+ JSON.stringify(user))                                    
+        const query = ` UPDATE admin SET    firstname = $2, lastname = $3, age = $4, mail = $5, 
+                                            username = $6, password = $7, phone = $8
+                        WHERE aid = $1 returning * `;
+        const result = await client.query(query, 
+                                                [
+                                                    user.aid, user.firstname, user.lastname, 
+                                                    user.age, user.mail, 
+                                                    user.username, user.password, user.phone
+                                                ]);
 
         // Display the retrieved data
         console.log('Retrieved rows:', result.rows);
@@ -183,5 +213,6 @@ export const getUnivs = async (client) => {
     catch (error) {
         console.error('Error retrieving data:', error);
     } 
+
 }
   

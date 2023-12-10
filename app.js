@@ -4,6 +4,7 @@ import PostgreSQLgClient from './postgres_client.js';
 import "dotenv/config";
 import cors from "cors";
 import session from "express-session";
+import AdminRoutes from './admin/routes.js'
 
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.json())
 const client = await PostgreSQLgClient();
 
 DataRoutes(app, client);
+AdminRoutes(app, client);
 
 process.on('SIGINT', () => {
   client.end().then(() => process.exit(0));
