@@ -42,8 +42,8 @@ function DataRoutes(app, client) {
 
     const signin = async (req, res) => {
 
-        const { firstname, lastname } = req.body;
-        const currentUsr = await dao.findUserByCredentials(client, firstname, lastname);
+        const { username, password } = req.body;
+        const currentUsr = await dao.findUserByCredentials(client, username, password);
         req.session['currentUser'] = currentUsr;
         res.json(currentUsr);
     
