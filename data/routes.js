@@ -65,7 +65,9 @@ function DataRoutes(app, client) {
 
             const currentUsr = await dao.createUser(client, req.body);
             req.session['currentUser'] = currentUsr;
+            console.log("current user signup: "+ JSON.stringify(currentUsr))
             res.json(currentUsr);
+
 
         }
         else{
