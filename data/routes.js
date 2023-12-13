@@ -69,7 +69,7 @@ function DataRoutes(app, client) {
             res.json(currentUsr);
 
 
-        }
+        } 
         else{
             res.status(404).json(
                 { message: "Username already taken" });
