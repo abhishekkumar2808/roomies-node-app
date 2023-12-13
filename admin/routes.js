@@ -210,7 +210,6 @@ function AdminRoutes(app, client) {
     app.put("/api/admin/:adminId", updateAdmin)
     app.put("/api/admin/users/:userId", updateUser)
     app.post("/api/admin/users",createUser)
-    //app.post("/api/admin/users/signup", signup);
     app.post("/api/admin/users/signin", signin);
     app.post("/api/admin/users/signout", signout);
     app.post("/api/admin/users/account", account);

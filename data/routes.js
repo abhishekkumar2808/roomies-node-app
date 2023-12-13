@@ -160,6 +160,7 @@ function DataRoutes(app, client) {
 
     app.get('/api/users', getUsers);
     app.get("/api/users/:univ", findUserByUniv);
+    
     app.post("/api/users/univ", getUnivs)
     app.put("/api/users/:userId", updateUser)
     app.post("/api/users/signup", signup);
