@@ -1,4 +1,5 @@
 import * as dao from "./dao.js";
+import axios from "axios";
 
 
 
@@ -158,9 +159,39 @@ function DataRoutes(app, client) {
         res.json(univ);
     }
 
+    const getRestaurants = async (req, res) => {
+
+        const {restaurant} = req.params;
+
+        const response = await axios.get(
+            `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${restaurant}`,
+            {
+              headers: {
+                Authorization: `Bearer YOdB7JhtSP32bouwKppsehcOAbYURuCD_PfYF3uGd0FzoLihlCHQRBNOGX7-4Q88LJanvKo7ZKYcE_Mw2r9yCZWcOWYTCeqLx1xQnQdgxJWNTP9vVUZxr2Oum8l5ZXYx`,
+              },
+            }
+          );
+      
+          // Extract relevant information from the response
+        //   console.log("business: ", JSON.stringify(response.data.businesses))
+          const restaurants = response.data.businesses.map((business) => {
+            return {
+              name: business.name,
+              address: business.location.address1,
+              rating: business.rating,
+              image_url: business.image_url,
+              review_count: business.review_count,
+              phone: business.display_phone
+            };
+          });
+      
+          res.json(restaurants);
+
+    }
+
     app.get('/api/users', getUsers);
+    app.get("/api/users/restaurants/:restaurant", getRestaurants)
     app.get("/api/users/:univ", findUserByUniv);
-    
     app.post("/api/users/univ", getUnivs)
     app.put("/api/users/:userId", updateUser)
     app.post("/api/users/signup", signup);
