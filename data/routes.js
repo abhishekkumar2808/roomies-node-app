@@ -81,7 +81,7 @@ function DataRoutes(app, client) {
         // console.log("data while signup: "+ JSON.stringify(req.body))
 
         const { univ } = req.params;
-        console.log("univ: "+ univ)
+        console.log("findUserByUniv univ: "+ univ)
         const user = await dao.findUserByUniv(client,univ);
 
 
@@ -189,7 +189,7 @@ function DataRoutes(app, client) {
 
     }
 
-    app.get('/api/users', getUsers);
+    app.get('/api/users/', getUsers);
     app.get("/api/users/restaurants/:restaurant", getRestaurants)
     app.get("/api/users/:univ", findUserByUniv);
     app.post("/api/users/univ", getUnivs)
