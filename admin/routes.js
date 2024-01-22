@@ -207,13 +207,16 @@ function AdminRoutes(app, client) {
 
     app.get('/api/admin/users', getUsers);
     app.get("/api/admin/users/:univ", findUserByUniv);
-    app.put("/api/admin/:adminId", updateAdmin)
-    app.put("/api/admin/users/:userId", updateUser)
-    app.post("/api/admin/users",createUser)
+
+    app.put("/api/admin/:adminId", updateAdmin);
+    app.put("/api/admin/users/:userId", updateUser);
+
+    app.post("/api/admin/users",createUser);
     app.post("/api/admin/users/signin", signin);
     app.post("/api/admin/users/signout", signout);
     app.post("/api/admin/users/account", account);
     app.post("/api/admin/users/:userId", findUserById);
+    
     app.delete("/api/admin/users/:userId", deleteUser);
     app.delete("/api/admin/users/univ/:univ", deleteUniv);
     

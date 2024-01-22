@@ -9,11 +9,23 @@ function DataRoutes(app, client) {
     function generateRandomNumbers(n, min, max) {
         let randomNumbers = [];
       
-        for (let i = 0; i < n; i++) {
+        while(true){
+
+          if(randomNumbers.length === n){
+            break;
+          }
+
           let randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
-          randomNumbers.push(randomNum);
+          if(randomNumbers.includes(randomNum)){
+              continue;
+          }else{
+              randomNumbers.push(randomNum);
+          }
+
+
+
         }
-      
+        console.log("rand number: ", randomNumbers)
         return randomNumbers;
       }
 
@@ -22,14 +34,18 @@ function DataRoutes(app, client) {
 
     const getUsers =  async (req, res) => {
 
+      console.log("fetches all users")
+
         const users = await dao.getUsers(client); 
         console.log("session value: "+ req.session['currentUser'])
 
         if(req.session['currentUser'] === undefined){
 
-            let randomIDs = generateRandomNumbers(4, 1, 10);
+            let randomIDs = generateRandomNumbers(4, 0, users.length-1);
        
-            const randUsers = users.filter(usr => randomIDs.includes(usr.id) );
+            const randUsers = users.filter((usr, index) => randomIDs.includes(index) );
+
+            console.log("size of the aray: ", randUsers.length)
             res.json(randUsers);
 
             
@@ -142,8 +158,7 @@ function DataRoutes(app, client) {
 
     const signout = (req, res) => {
 
-        // currentUser = null;
-        // res.json(200);
+
         req.session.destroy();
         res.json(200);
        }; 
@@ -169,7 +184,7 @@ function DataRoutes(app, client) {
             `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${restaurant}`,
             {
               headers: {
-                Authorization: `Bearer YOdB7JhtSP32bouwKppsehcOAbYURuCD_PfYF3uGd0FzoLihlCHQRBNOGX7-4Q88LJanvKo7ZKYcE_Mw2r9yCZWcOWYTCeqLx1xQnQdgxJWNTP9vVUZxr2Oum8l5ZXYx`,
+                Authorization: `Bearer ${process.env.API_TOKEN}`,
               },
             }
           );
@@ -194,13 +209,16 @@ function DataRoutes(app, client) {
     app.get('/api/users/', getUsers);
     app.get("/api/users/restaurants/:restaurant", getRestaurants)
     app.get("/api/users/:univ", findUserByUniv);
-    app.post("/api/users/univ", getUnivs)
+
     app.put("/api/users/:userId", updateUser)
+
+    app.post("/api/users/univ", getUnivs)
     app.post("/api/users/signup", signup);
     app.post("/api/users/signin", signin);
     app.post("/api/users/signout", signout);
     app.post("/api/users/account", account);
     app.post("/api/users/:userId", findUserById);
+    
     app.delete("/api/users/:userId", deleteUser);
     
 

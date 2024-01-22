@@ -6,7 +6,7 @@ export const getUsers = async (client) =>{
         const result = await client.query(query);
 
         // Display the retrieved data
-        console.log('Retrieved rows:', result.rows);
+        //console.log('Retrieved rows:', result.rows);
 
         return result.rows;
     } 
