@@ -221,7 +221,7 @@ function DataRoutes(app, client) {
     
     app.delete("/api/users/:userId", deleteUser);
     
-
+ 
 }
 
 export default DataRoutes;
