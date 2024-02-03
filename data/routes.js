@@ -176,7 +176,7 @@ function DataRoutes(app, client) {
         res.json(univ);
     }
 
-    const getRestaurants = async (req, res) => {
+    const getAllRestaurants = async (req, res) => {
 
         const {restaurant} = req.params;
 
@@ -206,12 +206,12 @@ function DataRoutes(app, client) {
 
     }
 
+
+
     app.get('/api/users/', getUsers);
-    app.get("/api/users/restaurants/:restaurant", getRestaurants)
+    app.get("/api/users/restaurants/:restaurant", getAllRestaurants)
     app.get("/api/users/:univ", findUserByUniv);
-
     app.put("/api/users/:userId", updateUser)
-
     app.post("/api/users/univ", getUnivs)
     app.post("/api/users/signup", signup);
     app.post("/api/users/signin", signin);
